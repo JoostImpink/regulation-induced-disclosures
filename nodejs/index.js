@@ -7,9 +7,11 @@
 ///////////////////////////////////////////////////////////// Settings
 // set testing flag to true/false
 var test = false;
-// also note there are settings in config.js 
-// (names of files with ids to scan, location of filings on hard disk)
-
+// directory with SEC filings
+var filingsDir: "F:/temp/10K_filings/";
+// import holds file with fileIds to read
+var fileIds: "./import/downloadIds.txt";
+var fileIdsTest: "./import/downloadIds_first_10.txt";
 //////////////////////////////////////////////////////////////////////
 
 // system modules
@@ -19,12 +21,13 @@ var fs = require('fs');
 var config = require('./config');
 var scan = require('./scan');
 
-// filename that holds ids (set in config)
-var filenameIds = test ?  config.fileIdsTest : config.fileIds ;
+// helper function to get full path for filing with @id (number)
+fileIdToPath: function( id ){ return this.filingsDir + id + ".txt"; };
 
-/*
-	keywords, array of { name, regex }
-*/
+// depending on test, load fileIds or fileIdsTest (fewer filings)
+var filenameIds = test ?  fileIdsTest : fileIds ;
+
+// 	keywords structure, array of { name, regex }
 var keywords = [
 	{ name: "SFAS133", regex: /FAS(\s+No\.?)?\s*133/igm },
 	{ name: "SFAS138", regex: /FAS(\s+No\.?)?\s*138/igm },
@@ -52,9 +55,9 @@ console.log("id," + header);
 
 // loop through files
 fileIds.forEach( function(id){
-
 	// init (loads filing)
-	scan.init(id);
+	var path = fileIdToPath(id);
+	scan.init(id, path);
 	// scan keywords
 	var result = scan.scan( keywords ) ;
 	// convert result into csv string

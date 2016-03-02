@@ -11,12 +11,12 @@ module.exports = {
 	filing: null,
 	isHTML: null,
 
-	// id: filing id
-	init: function(id){
+	// @id: filingID, @path: path to filing
+	init: function(id, path){
+		// store id
 		this.id = id;
-		// get path
-		var filingPath = config.fileIdToPath(id);
-		this.filing = fs.readFileSync( filingPath , "utf8");
+		// read filing
+		this.filing = fs.readFileSync( path , "utf8");
 		// replace html entities (&nbsp; etc) with space
 		this.filing = this.filing.replace(/&[^;\s]+;/g, " ");
 		// get rid of span and font tags		
