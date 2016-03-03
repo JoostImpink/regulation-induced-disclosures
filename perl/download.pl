@@ -8,7 +8,7 @@ $write_dir = 'F:\temp\10K_filings';
 #
 # Filename that holds downloadIds and the urls 
 # (make sure it exists in same folder as this script)
-$filings = "10Ks_to_download_example.txt";
+$filings = 'F:\temp\perl_download_these.txt';
 #######################################################
 
 # helper function to retrieve url (filing from Edgar)
@@ -35,8 +35,8 @@ my @file = <filingsToDownload>;
 foreach $line (@file) { 	
 	# removes newline from end of each line
 	chomp($line);
-	# each line holds the downloadId and the url
-	($downloadId, $url) = split (",", $line);
+	# each line holds the url and downloadId
+	($url, $downloadId) = split (",", $line);
  	# full url
 	$full_url = "http://www.sec.gov/Archives/" . $url;
 	# Retrieve filing from Edgar

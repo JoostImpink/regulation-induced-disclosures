@@ -2,8 +2,6 @@
 
 // system modules
 var fs = require('fs');
-// local modules
-var config = require('./config');
 
 module.exports = {
 

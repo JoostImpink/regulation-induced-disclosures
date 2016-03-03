@@ -5,27 +5,19 @@
 */
 
 ///////////////////////////////////////////////////////////// Settings
-// set testing flag to true/false
-var test = false;
 // directory with SEC filings
-var filingsDir: "F:/temp/10K_filings/";
+var filingsDir = "F:/temp/10K_filings/";
 // import holds file with fileIds to read
-var fileIds: "./import/downloadIds.txt";
-var fileIdsTest: "./import/downloadIds_first_10.txt";
+var fileIds = "F:/temp/nodejs_scan_these.txt";
 //////////////////////////////////////////////////////////////////////
 
 // system modules
 var fs = require('fs');
-
-// local modules
-var config = require('./config');
+// local module
 var scan = require('./scan');
 
 // helper function to get full path for filing with @id (number)
-fileIdToPath: function( id ){ return this.filingsDir + id + ".txt"; };
-
-// depending on test, load fileIds or fileIdsTest (fewer filings)
-var filenameIds = test ?  fileIdsTest : fileIds ;
+function fileIdToPath(id){ return filingsDir + id + ".txt"; };
 
 // 	keywords structure, array of { name, regex }
 var keywords = [
@@ -45,9 +37,7 @@ var keywords = [
 ];
 
 // load fileIds into array
-var fileIds = fs.readFileSync( filenameIds ).toString().split("\r\n");
-//drop first element (header)
-fileIds.shift();
+var fileIds = fs.readFileSync( fileIds ).toString().split("\r\n");
 
 // print header
 var header = keywords.map(function(d) { return d.name;}).join(",")
