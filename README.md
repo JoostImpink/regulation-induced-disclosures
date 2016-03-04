@@ -126,8 +126,6 @@ Here a dataset is created based on Funda with the `downloadId` appended. Then a 
     	and b.formtype IN ("10-K", "10-K405", "10-KSB", "10-KT", "10KSB",  "10KSB40", "10KT405"); 
     quit;
     
-    data mylib.copy ; set mylib.b_funda_sec;run;
-    
     /*	Decide which 10-Ks to actually scan, in this case all (with nonmissing downloadId), 
     	export dataset with downloadId for nodejs */
     proc export data = mylib.b_funda_sec (keep = downloadId where=(missing(downloadId) eq 0)) 
@@ -151,7 +149,8 @@ In the last step of this example we import the keywords, and create a dataset wi
     filename KEYWORDS "&projectDir.nodejs\output\keywords.csv";
     
     /* 	Keyword variable names */
-    %let keywordVars = sfas133 sfas138 sfas142 sfas143 sfas157 sfas159 sfas123 compdiscuss fin46r fin47 section404 section401 section1a;
+    %let keywordVars = sfas133 sfas138 sfas142 sfas143 sfas157 sfas159 sfas123 compdiscuss fin46r fin47
+    section404 section401 section1a;
     		
     data mylib.c_keywords;
     infile KEYWORDS dsd delimiter=","  firstobs=2 LRECL=32767 missover;
@@ -169,11 +168,14 @@ In the last step of this example we import the keywords, and create a dataset wi
 Here the index is appended to the dataset. The variable will be named `index_2` and the scoring is based on below/above the median. 
 ```sas    
     /* 	Create index */
-    %appendIndex(dsin=mylib.d_funda_keywords, dsout=mylib.e_index1, keywordvars=&keywordVars, groups=2, scoreName=index_2);
+    %appendIndex(dsin=mylib.d_funda_keywords, dsout=mylib.e_index1, keywordvars=&keywordVars, 
+    groups=2, scoreName=index_2);
 ```
 We add another index, this time using fewer keywords (just for illustration) and with terciles (max score of 3 for each keyword, based on first/middle/last tercile)
    ```sas 
     /*	For sensitivity tests create index (for example) using terciles without sfas 157 and 159 */
-    %let keywordVarsAlt = sfas133 sfas138 sfas142 sfas143 sfas123 compdiscuss fin46r fin47 section404 section401 section1a;
-    %appendIndex(dsin=mylib.e_index1, dsout=mylib.e_index2, keywordvars=&keywordVarsAlt, groups=3, scoreName=index_3);
+    %let keywordVarsAlt = sfas133 sfas138 sfas142 sfas143 sfas123 compdiscuss fin46r fin47 section404 
+    section401 section1a;
+    %appendIndex(dsin=mylib.e_index1, dsout=mylib.e_index2, keywordvars=&keywordVarsAlt, 
+    groups=3, scoreName=index_3);
 ```
