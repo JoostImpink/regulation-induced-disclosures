@@ -11,6 +11,8 @@ This repository contains the following code:
 - A nodejs script that scans the 10-K filings for keywords using regular expressions
 - SAS code that creates input datasets for perl and nodejs, imports nodejs outsput and creates the index  
 
+The files in the repository can be [downloaded as a zipfile](https://github.com/JoostImpink/regulation-induced-disclosures/archive/master.zip).
+
 ### Requirements
 
 It is assumed you have a local copy of Compustat Fundamental Annual available in SAS as `comp.funda` (otherwise, wrap the relevant code in an `rsubmit` block).
@@ -28,8 +30,9 @@ It is assumed you have a local copy of Compustat Fundamental Annual available in
   			mylib\			SAS library folder
   			10K_filings\	folder with downloaded 10Ks
 	
-	Note:
-	- The main folder used in the code (`F:\temp\`) can be set to another folder in a macro variable `projectDir`.
+	Notes:
+	- The main folder used in the code (`F:\temp\`) can be set to another folder in a macro variable `projectDir`
+	- The zipfile contains folders sas, perl and nodejs; the other folders need to be created manually
 	
 ### Steps
 
@@ -132,7 +135,7 @@ Here a dataset is created based on Funda with the `downloadId` appended. Then a 
     outfile = "&projectDir.nodejs_scan_these.txt" dbms=csv replace; putnames=no; run;
 ```
 
-###	5. 	Nodejs: Scan 10-Ks for keywords, 
+###	5. 	Nodejs: Scan 10-Ks for keywords 
 
 We scan the 10-K filings using nodejs (download at [https://nodejs.org/en/download/](https://nodejs.org/en/download/)).
 
