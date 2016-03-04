@@ -1,8 +1,8 @@
-## regulation-induced-disclosures
+## Regulation-Induced Disclosures: Is ‘More’ Actually ‘Less’?
 
-### Code used to download and scan 10-K filings and create a disclosure complexity index as used in: Regulation-Induced Disclosures: Is ‘More’ Actually ‘Less’?
+### This repository contains code to download and scan 10-K filings and create a disclosure complexity index
 
-You may use the code in this repository but we ask that you cite our paper:  *Regulation-Induced Disclosures: Is ‘More’ Actually ‘Less’? Joost Impink, Mari Paananen and Annelies Renders*
+####You may freely use the code in this repository but we ask that you cite our paper:  *Regulation-Induced Disclosures: Is ‘More’ Actually ‘Less’? Joost Impink, Mari Paananen and Annelies Renders*
 
 ### General
 
@@ -101,8 +101,7 @@ Perl will go through the urls (and downloadIds)  `perl_download_these.txt` and w
 The next step matches the 10-K filings based on the filingdate. Since Edgar archive data does not provide the fiscal year end, this match is not very exact (some filings may be delayed more than a year). The header in the 10-K does contain the field `conformed end of period`, which is the fiscal year end. You may want to first scan the 10-Ks and retrieve this date. Then, a match on Compustat Funda can be made on `CIK` and `datadate` in Funda, versus `CIK` and `conformed end of period` in the filings (note that `datadate` may be a few days before/after the exact fiscal year end).
 
 
-###	4. 	Create dataset based of Compustat Funda and append downloadId based on Edgar filings, 
-		export file with ids to scan for keywords                                                        
+###	4. 	Create dataset based of Compustat Funda and append downloadId based on Edgar filings, export file with ids to scan for keywords                                                        
 
 Here a dataset is created based on Funda with the `downloadId` appended. Then a dataset with all the downloadIds to scan is exported. Typically, only a portion of all 10-Ks in Edgar need to be scanned (not all firms that file with the SEC are on Funda, also, roughly 30-40% of the observations are lost as `CIK` is often missing in Funda or has changed over time. 
 ```sas
@@ -161,7 +160,10 @@ In the last step of this example we import the keywords, and create a dataset wi
     
     /* 	Append keywords to main dataset */
     proc sql; 
-    	create table mylib.d_funda_keywords as select a.*, b.* from mylib.b_funda_sec a left join mylib.c_keywords b on a.downloadId = b.downloadId;
+    	create table mylib.d_funda_keywords as 
+    	select a.*, b.* from mylib.b_funda_sec a 
+    	left join mylib.c_keywords b 
+    	on a.downloadId = b.downloadId;
     quit;
 ```
 Here the index is appended to the dataset. The variable will be named `index_2` and the scoring is based on below/above the median. 
