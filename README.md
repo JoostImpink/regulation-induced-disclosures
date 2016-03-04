@@ -134,7 +134,9 @@ Here a dataset is created based on Funda with the `downloadId` appended. Then a 
 
 ###	5. 	Nodejs: Scan 10-Ks for keywords, 
 
-navigate to `F:\temp\nodejs` and run: 
+We scan the 10-K filings using nodejs (download at [https://nodejs.org/en/download/](https://nodejs.org/en/download/)).
+
+Navigate to `F:\temp\nodejs` and run: 
 
     node index.js > output/keywords.csv
 
