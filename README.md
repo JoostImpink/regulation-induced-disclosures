@@ -2,7 +2,7 @@
 
 ### This repository contains code to download and scan 10-K filings and create a disclosure complexity index
 
-####You may freely use the code in this repository but we ask that you cite our paper:  *Regulation-Induced Disclosures: Is ‘More’ Actually ‘Less’? Joost Impink, Mari Paananen and Annelies Renders*
+####You may freely use the code in this repository but we ask that you cite our paper:  *Impink, Joost and Paananen, Mari and Renders, Annelies, Regulation-Induced Disclosures: Is 'More' Actually 'Less'? (March 4, 2016). Available at SSRN: http://ssrn.com/abstract=2742059*
 
 ### General
 
@@ -12,11 +12,6 @@ This repository contains the following code:
 - SAS code that creates input datasets for perl and nodejs, imports nodejs outsput and creates the index  
 
 The files in the repository can be [downloaded as a zipfile](https://github.com/JoostImpink/regulation-induced-disclosures/archive/master.zip).
-
-### Requirements
-
-It is assumed you have a local copy of Compustat Fundamental Annual available in SAS as `comp.funda` (otherwise, wrap the relevant code in an `rsubmit` block).
-
 
 ### Assumed folder structure
 
@@ -34,6 +29,10 @@ It is assumed you have a local copy of Compustat Fundamental Annual available in
 	- The main folder used in the code (`F:\temp\`) can be set to another folder in a macro variable `projectDir`
 	- The zipfile contains folders sas, perl and nodejs; the other folders need to be created manually
 	
+### Requirements
+
+It is assumed you have a local copy of Compustat Fundamental Annual available in SAS as `comp.funda` (otherwise, wrap the relevant code in an `rsubmit` block).
+
 ### Steps
 
 1. Set up folder structure, download and extract SEC filings archive
