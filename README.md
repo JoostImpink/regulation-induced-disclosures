@@ -18,7 +18,7 @@ The files in the repository can be [downloaded as a zipfile](https://github.com/
 	The following folder structure is assumed:
 
 		F:\temp\
-  			sas\			SAS code (this file and macros)
+  			sas\			SAS code (main.sas file and macros)
   			perl\			Perl script
   			nodejs\			Nodejs script
   			edgar\			SAS library folder for SEC filings archive
