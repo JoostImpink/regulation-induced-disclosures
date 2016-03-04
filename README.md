@@ -22,7 +22,7 @@ The files in the repository can be [downloaded as a zipfile](https://github.com/
   			perl\			Perl script
   			nodejs\			Nodejs script
   			edgar\			SAS library folder for SEC filings archive
-  			mylib\			SAS library folder
+  			myLib\			SAS library folder
   			10K_filings\	folder with downloaded 10Ks
 	
 	Notes:
