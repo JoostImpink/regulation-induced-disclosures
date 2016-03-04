@@ -29,13 +29,13 @@ It is assumed you have a local copy of Compustat Fundamental Annual available in
   			10K_filings\	folder with downloaded 10Ks
 	
 	Note:
-	- The main folder (in this case `F:\temp\` can be set in a macro variable `projectDir`
+	- The main folder used in the code (`F:\temp\`) can be set to another folder in a macro variable `projectDir`.
 	
 ### Steps
 
 1. Set up folder structure, download and extract SEC filings archive
 2. SAS: Download and extract zipfile of SEC filings archive, create dataset with ids and urls, and export it
-3. Perl: Download the 10-Ks see per/download.perl, optional (code not included): Scan 10-Ks to get fiscal year end (variable 'CONFORMED PERIOD OF REPORT' in the 10-K header)
+3. Perl: Download the 10-Ks see per/download.perl
 4. SAS: Create dataset based of Compustat Funda and append downloadId based on Edgar filings, export file with ids to scan for keywords
 5. Nodejs: Scan 10-Ks for keywords
 6. SAS: Import keywords, create index
@@ -47,7 +47,8 @@ Steps are described in more detail below.
 A SAS dataset containing firm name, central index key, form type, filing date for filings over 1993-2015 is available at: http://www.wrds.us/index.php/repository/view/25
 Download the .zip, and extract it to a folder, e.g. F:\temp\edgar, and rename the sas data set to 'filings' 
 Create a library edgar to this folder, create library (mylib) to store datasets
-		
+
+```sas		
     /*	Path to folder that holds /perl, /nodejs, /sas (set this to match your folder) */
     %let projectDir = "F:\temp\";
     /*	Location where the SEC archive is extracted */
@@ -60,10 +61,11 @@ Create a library edgar to this folder, create library (mylib) to store datasets
     %include "&projectDir.sas\macro_create_index.sas";
     /*	Helper macro to work with arrays */
     %include "&projectDir.sas\macro_do_over.sas";
-
+```
 
 ###	2. Download and extract zipfile of SEC filings archive, create dataset with ids and urls, and export it 
 
+```sas
     /* 	Select 10-K (and amended) filings */
     proc sql;
         create table mylib.a_sec as
@@ -79,11 +81,11 @@ Create a library edgar to this folder, create library (mylib) to store datasets
     		/* for completeness include amended filings */
     		"10-KT/A", "10KSB", "10KSB/A", "10KSB40", "10KSB40/A", "10KT405", "10KT405/A");
     quit;
-    
+
     /*	Create dataset with just the downloadId and url to be downloaded with perl */
     proc export data = mylib.a_sec (keep = downloadId url) 
     outfile = "&projectDir.perl_download_these.txt" dbms=csv replace; putnames=no; run;
-
+```
 ###	3. 	Perl: Download the 10-Ks
 
 Navigate to the perl directory
@@ -103,7 +105,7 @@ The next step matches the 10-K filings based on the filingdate. Since Edgar arch
 		export file with ids to scan for keywords                                                        
 
 Here a dataset is created based on Funda with the `downloadId` appended. Then a dataset with all the downloadIds to scan is exported. Typically, only a portion of all 10-Ks in Edgar need to be scanned (not all firms that file with the SEC are on Funda, also, roughly 30-40% of the observations are lost as `CIK` is often missing in Funda or has changed over time. 
-    
+```sas
     /* 	Match Funda with SEC Edgar to get downloadId. 
     	Left join so we can assess how many observations are lost because of missing/changed CIK (roughly 40%)
     	For simplicity assume that a 10-K is filed within 120 days after year end
@@ -131,21 +133,21 @@ Here a dataset is created based on Funda with the `downloadId` appended. Then a 
     	export dataset with downloadId for nodejs */
     proc export data = mylib.b_funda_sec (keep = downloadId where=(missing(downloadId) eq 0)) 
     outfile = "&projectDir.nodejs_scan_these.txt" dbms=csv replace; putnames=no; run;
-
+```
 
 ###	5. 	Nodejs: Scan 10-Ks for keywords, 
 
-navigate to /nodejs/ and run: 
+navigate to `F:\temp\nodejs` and run: 
 
     node index.js > output/keywords.csv
 
-The nodejs output is imported in the next step	
+The nodejs script will read the downloadIds in `nodejs_scan_these.txt` and scan these for the keywords. The output is written in `F:\temp\nodejs\output\keywords.csv` and is imported in SAS in the next step.
 
 	
 ###	6. SAS: Import keywords, create index                                                                                      
 
 In the last step of this example we import the keywords, and create a dataset with the index. We use a separate macro to construct the index, to allow for variations (for sensitivity analyses).
-    
+```sas    
     /* 	Path to nodejs output */             
     filename KEYWORDS "&projectDir.nodejs\output\keywords.csv";
     
@@ -161,14 +163,15 @@ In the last step of this example we import the keywords, and create a dataset wi
     proc sql; 
     	create table mylib.d_funda_keywords as select a.*, b.* from mylib.b_funda_sec a left join mylib.c_keywords b on a.downloadId = b.downloadId;
     quit;
-
+```
 Here the index is appended to the dataset. The variable will be named `index_2` and the scoring is based on below/above the median. 
-    
+```sas    
     /* 	Create index */
     %appendIndex(dsin=mylib.d_funda_keywords, dsout=mylib.e_index1, keywordvars=&keywordVars, groups=2, scoreName=index_2);
-
+```
 We add another index, this time using fewer keywords (just for illustration) and with terciles (max score of 3 for each keyword, based on first/middle/last tercile)
-    
+   ```sas 
     /*	For sensitivity tests create index (for example) using terciles without sfas 157 and 159 */
     %let keywordVarsAlt = sfas133 sfas138 sfas142 sfas143 sfas123 compdiscuss fin46r fin47 section404 section401 section1a;
     %appendIndex(dsin=mylib.e_index1, dsout=mylib.e_index2, keywordvars=&keywordVarsAlt, groups=3, scoreName=index_3);
+```
