@@ -24,10 +24,12 @@
 	/* Prepare dataset with only vars that are needed*/
 	data rank0 (keep = gvkey fyear downloadId &keywordvars);
 	set &dsin;
-	/* treat zeros as missings */
+	/* treat zeros as missings, so these are ignored in proc rank */
 	%do_over(values=&keywordvars, phrase=if ? eq 0 then ? =.;);
 	/* If mentioned only once, consider it not mentioned: set to missing  */
 	%do_over(values=&keywordvars, phrase=if ? eq 1 then ? =.;);
+	/* only if 10K could be scanned */
+	if missing(downloadId) eq 0;
 	run;
 
 	/* 	Create ranked variables */
@@ -42,12 +44,10 @@
 	set rank1;
 	/*	Add 1 to all rank variables */
 	%do_over(values=&keywordvars, phrase=? = ? + 1;);
-	/*  Replace missings with zeros */
+	/*  Turn missings back into zeros */
 	%do_over(values=&keywordvars, phrase=if ? eq . then ? = 0;);
 	/* 	Construct measure by adding the ranked values for each keyword */	
 	score = %do_over(values=&keywordvars, between=%str(+) ) ;
-	/* 	If there is no downloadId, the score should be missing */
-	if (downloadId eq .) then score = .;
 	run;
 
 	/*	Create output dataset */

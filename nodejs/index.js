@@ -6,9 +6,9 @@
 
 ///////////////////////////////////////////////////////////// Settings
 // directory with SEC filings
-var filingsDir = "F:/temp/10K_filings/";
+var filingsDir = "../10K_filings/";
 // import holds file with fileIds to read
-var fileIds = "F:/temp/nodejs_scan_these.txt";
+var fileIds = "../nodejs_scan_these.txt";
 //////////////////////////////////////////////////////////////////////
 
 // system modules

@@ -4,11 +4,11 @@ use HTTP::Request;
 
 ############################################## Settings
 # Directory to write the filings (make sure it exists)
-$write_dir = 'F:\temp\10K_filings';
+$write_dir = '..\10K_filings';
 #
 # Filename that holds downloadIds and the urls 
 # (make sure it exists in same folder as this script)
-$filings = 'F:\temp\perl_download_these.txt';
+$filings = '..\perl_download_these.txt';
 #######################################################
 
 # helper function to retrieve url (filing from Edgar)

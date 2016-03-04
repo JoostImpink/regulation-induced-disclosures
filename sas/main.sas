@@ -33,7 +33,7 @@
 *************************************************************************************************************/
 
 /*	Path to folder that holds /perl, /nodejs, /sas (set this to match your folder) */
-%let projectDir = "F:\temp\";
+%let projectDir = F:\temp\;
 /*	Location where the SEC archive is extracted */
 libname edgar "&projectDir.edgar";
 /*	Local library to store files */
