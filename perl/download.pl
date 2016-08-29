@@ -11,18 +11,6 @@ $write_dir = '..\10K_filings';
 $filings = '..\perl_download_these.txt';
 #######################################################
 
-# helper function to retrieve url (filing from Edgar)
-sub get_http {
-	my $url = shift;
-	my $request = HTTP::Request->new(GET => $url);
-	my $response = $ua->request($request);
-	if (!$response->is_success) {
-		print STDERR "GET '%s' failed: %s\n",
-		$url, $response->status_line;
-		return undef;
-	}
-	return $response->content;
-}
 # user agent object for handling HTTP requests
 my $ua = LWP::UserAgent->new;
 
@@ -41,9 +29,8 @@ foreach $line (@file) {
 	$full_url = "http://www.sec.gov/Archives/" . $url;
 	# Retrieve filing from Edgar
 	my $request = HTTP::Request->new(GET => $full_url);
-	my $response =$ua->get($full_url );
-	$p = $response->content;
-	if ($p) {
+	my $response = $ua->get($full_url);
+	if ($response->is_success) {
 		# filing was read, write it to disk
 		# write message to screen
 		print "Writing file with id $downloadId \n";    
@@ -52,7 +39,7 @@ foreach $line (@file) {
 		# open the new file
 		open OUT, ">$filename" or die $!;
 		# write and close file
-		print OUT $p;
+		print OUT $response->content;
 		close OUT;
 	} else {
 		# there was an error, write to error log 
