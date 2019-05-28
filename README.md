@@ -1,8 +1,8 @@
-## Regulation-Induced Disclosures: Is ‘More’ Actually ‘Less’?
+## Regulation-Induced Disclosures: Evidence of Information Overload?
 
 ### This repository contains code to download and scan 10-K filings and create a disclosure complexity index
 
-#### You may freely use the code in this repository but we ask that you cite our paper:  *Impink, Joost and Paananen, Mari and Renders, Annelies, Regulation-Induced Disclosures: Evidence of Information Overload?. A previous version of the paper is available at SSRN: http://ssrn.com/abstract=2742059*
+#### You may freely use the code in this repository but we ask that you cite our paper:  *Impink, Joost and Paananen, Mari and Renders, Annelies, Regulation-Induced Disclosures: Evidence of Information Overload? A previous version of the paper is available at SSRN: http://ssrn.com/abstract=2742059*
 
 ### General
 
