@@ -153,9 +153,11 @@ In the last step of this example we import the keywords, and create a dataset wi
     filename KEYWORDS "&projectDir.nodejs\output\keywords.csv";
     
     /* 	Keyword variable names */
-    %let keywordVars = sfas133 sfas138 sfas142 sfas143 sfas157 sfas159 sfas123 compdiscuss fin46r fin47
-    section404 section401 section1a;
-    		
+    %let keywordVars = SFAS133 isNotSFAS133 SFAS138 isNotSFAS138 SFAS142 isNotSFAS142 SFAS143 isNotSFAS143 SFAS157 isNotSFAS157
+    SFAS159 isNotSFAS159 SFAS123 isNotSFAS123 compensation isNotcompensation FIN46 isNotFIN46 FIN47 isNotFIN47 section404 
+    isNotsection404 section401 isNotsection401 section1a isNotsection1a SFAS140 isNotSFAS140 SFAS148 isNotSFAS148 SFAS132 
+    isNotSFAS132 SFAS158 isNotSFAS158 SFAS146 isNotSFAS146 SFAS144 isNotSFAS144 SFAS149 isNotSFAS149;
+   		
     data mylib.c_keywords;
     infile KEYWORDS dsd delimiter=","  firstobs=2 LRECL=32767 missover;
     input downloadId &keywordVars;
@@ -168,18 +170,10 @@ In the last step of this example we import the keywords, and create a dataset wi
     	left join mylib.c_keywords b 
     	on a.downloadId = b.downloadId;
     quit;
-```
-Here the index is appended to the dataset. The variable will be named `index_2` and the scoring is based on below/above the median. 
-```sas    
-    /* 	Create index */
-    %appendIndex(dsin=mylib.d_funda_keywords, dsout=mylib.e_index1, keywordvars=&keywordVars, 
-    groups=2, scoreName=index_2);
-```
-We add another index, this time using fewer keywords (just for illustration) and with terciles (max score of 3 for each keyword, based on first/middle/last tercile)
-   ```sas 
-    /*	For sensitivity tests create index (for example) using terciles without sfas 157 and 159 */
-    %let keywordVarsAlt = sfas133 sfas138 sfas142 sfas143 sfas123 compdiscuss fin46r fin47 section404 
-    section401 section1a;
-    %appendIndex(dsin=mylib.e_index1, dsout=mylib.e_index2, keywordvars=&keywordVarsAlt, 
-    groups=3, scoreName=index_3);
+    
+    /* 	Final processing here: 
+	- replace single counts with 0
+	- standardize by industry-year
+	- index equals the sum standardized counts  */
+	
 ```
