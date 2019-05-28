@@ -42,8 +42,7 @@ foreach $line (@file) {
 		print OUT $response->content;
 		close OUT;
 	} else {
-		# there was an error, write to error log 
-		# open file to write errors, and close it
+		# there was an error, write to error log 		
 		open LOG , ">download_error_log.txt" or die $!;
 		print LOG "$downloadId,error\n" ;		
 		close LOG;
