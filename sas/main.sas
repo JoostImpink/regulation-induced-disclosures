@@ -42,8 +42,6 @@ libname mylib "&projectDir.myLib";
 /* 	Load macros */
 /*	Macro that constructs the complexity disclosure index */
 %include "&projectDir.sas\macro_create_index.sas";
-/*	Helper macro to work with arrays */
-%include "&projectDir.sas\macro_do_over.sas";
 
 
 /*	2. Download and extract zipfile of SEC filings archive, create dataset with ids and urls, and export it 
@@ -135,3 +133,7 @@ proc sql;
 	create table mylib.d_funda_keywords as select a.*, b.* from mylib.b_funda_sec a left join mylib.c_keywords b on a.downloadId = b.downloadId;
 quit;
 
+/* 	Further processing here: 
+	- replace single counts with 0
+	- standardize by industry-year
+	- index equals the sum standardized counts  */
